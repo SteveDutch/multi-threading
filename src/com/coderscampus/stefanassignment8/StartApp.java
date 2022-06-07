@@ -12,9 +12,10 @@ public class StartApp {
 
 	public static void main(String[] args) {
 		
-		//Assignment8 assignment = new Assignment8();
-		CompletableFuture numbers = Collections.synchronizedList(new ArrayList<>());
+		Assignment8 assignment = new Assignment8();
+		List<Integer> numbers = Collections.synchronizedList(new ArrayList<>());
 		int taskId = 0;
+		List<CompletableFuture<Void>> tasks = new ArrayList<>();
 		
 		
 		ExecutorService cpuBoundTask = Executors.newFixedThreadPool(300);
@@ -23,10 +24,18 @@ public class StartApp {
 		//CompletableFuture.runAsync(()-> assignment.getNumbers(), executor);
 		 			
 		// from week 12-09r 
-		for (int j=0; j<1000; j++) {
-			numbers = ((CompletableFuture) CompletableFuture.supplyAsync(() ->new Assignment8(), ioBoundTask)
-					.thenApplyAsync(assignment -> assignment.getNumbers(), cpuBoundTask).get())
-					.exceptionally( e -> "Pirat Guybrush hat den Todesfluch '"    );
+//		for (int j=0; j<1000; j++) {
+//			tasks = ((CompletableFuture) CompletableFuture.supplyAsync(() ->new Assignment8(), ioBoundTask)
+//					.thenApplyAsync(assignment -> assignment.getNumbers(), cpuBoundTask).get())
+//					.exceptionally( e -> "Pirat Guybrush hat den Todesfluch '"    );
+			
+			
+		// new try
+			for (int i = 0; i < 1000; i++) {
+				CompletableFuture<Void> task = CompletableFuture.supplyAsync(() -> assignment.getNumbers(), cpuBoundTask)
+																.thenAccept(number -> numbers.addAll(number));
+				tasks.add(task);
+			
 
 //		CompletableFuture.supplyAsync(() ->new Assignment8(), ioBoundTask)
 //		 .thenApplyAsync(assignment -> assignment.getNumbers(), cpuBoundTask)
@@ -44,6 +53,7 @@ public class StartApp {
 		String message = "Done";
 		System.out.println(message);
 		System.out.println("Länge von numbers = " + numbers.toArray().length);
+		
 		}
 //		CompletableFuture.runAsync(()-> assignment.getNumbers(), ioBoundTask);
 		
@@ -85,7 +95,7 @@ public class StartApp {
 //    		System.out.println(message);
 //        	
 //        }
-
+	}
 	}
 
-}
+
