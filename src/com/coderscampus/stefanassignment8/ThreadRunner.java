@@ -12,13 +12,11 @@ import java.util.stream.Collectors;
 
 public class ThreadRunner {
 
-	public  String run() throws InterruptedException {
+	public String runThreads() throws InterruptedException {
 
 		Assignment8 assignment = new Assignment8();
 		List<Integer> numbers = Collections.synchronizedList(new ArrayList<>());
-
 		List<CompletableFuture<Void>> tasks = new ArrayList<>();
-
 		ExecutorService cpuBoundTask = Executors.newFixedThreadPool(1000);
 //		ExecutorService ioBoundTask = Executors.newCachedThreadPool();
 //		Executor executor = Executors.newSingleThreadScheduledExecutor();
@@ -40,13 +38,11 @@ public class ThreadRunner {
 
 		System.out.println("Länge von numbers = " + numbers.toArray().length);
 
-		Map<Integer, Long> numbersFrequency = numbers.stream()
+		Map<Integer, Long> numbersFrequency = numbers.parallelStream()
 				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 		System.out.println(numbersFrequency);
 		String message = "well done";
-		return message; 	
+		return message;
 	}
-	
-	
 
 }
